@@ -1,42 +1,50 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Upload Images</title>
-  <link rel="stylesheet" href="style.css">
-  <!-- Firebase Scripts -->
-  <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-storage-compat.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Upload Image</title>
+  <link rel="stylesheet" href="upload.css">
 </head>
 <body>
-  <h1>Upload Photos</h1>
-  <input type="file" id="fileInput" multiple accept="image/*">
-  <button onclick="uploadImages()">Upload</button>
-  <a href="index.html">Back to Home</a>
-  <div id="status"></div>
+  <div class="upload-container">
+    <h1>Upload Image</h1>
+    <input type="file" id="fileInput" />
+    <button onclick="uploadImage()">Upload</button>
+    <p id="status"></p>
+    <a href="index.html" class="home-link">← Go to Home</a>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
 
   <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyBHiXDPWU0V9zBhoicWb7VL5YP6I7ZIcBo",
-      authDomain: "website-f9439.firebaseapp.com",
-      projectId: "website-f9439",
-      storageBucket: "website-f9439.appspot.com",
-      messagingSenderId: "614527810563",
-      appId: "1:614527810563:web:42ad92fc101c83d095a236"
-    };  
-const storageRef = storage.ref("images/" + file.name);
+        const firebaseConfig = {
+    apiKey: "AIzaSyBHiXDPWU0V9zBhoicWb7VL5YP6I7ZIcBo",
+    authDomain: "website-f9439.firebaseapp.com",
+    projectId: "website-f9439",
+    storageBucket: "website-f9439.appspot.com",
+    messagingSenderId: "614527810563",
+    appId: "1:614527810563:web:42ad92fc101c83d095a236"
+    };
+
+
     firebase.initializeApp(firebaseConfig);
     const storage = firebase.storage();
 
-    function uploadImages() {
-      const files = document.getElementById("fileInput").files;
-      const status = document.getElementById("status");
-      status.innerHTML = '';
+    function uploadImage() {
+      const file = document.getElementById("fileInput").files[0];
+      if (!file) {
+        document.getElementById("status").innerText = "Please select a file.";
+        return;
+      }
 
-      Array.from(files).forEach(file => {
-        const ref = storage.ref('gallery/' + file.name);
-        ref.put(file).then(() => {
-          status.innerHTML += `<p>Uploaded: ${file.name}</p>`;
-        });
+      const storageRef = storage.ref("images/" + file.name);
+      storageRef.put(file).then(() => {
+        document.getElementById("status").innerText = "Upload successful!";
+      }).catch((error) => {
+        document.getElementById("status").innerText = "Upload failed: " + error.message;
       });
     }
   </script>

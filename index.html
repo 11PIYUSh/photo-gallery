@@ -1,17 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Photo Gallery</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Photo Gallery</title>
+  <link rel="stylesheet" href="gallery.css"/>
 </head>
 <body>
+  <header>
     <h1>My Photo Gallery</h1>
-    <div id="gallery" class="gallery"></div>
-    <a href="upload.html" class="admin-link">Go to Upload Page</a>
-    <script src="script.js"></script>
-    <!-- Firebase scripts -->
-<script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app-compat.js"
-    const firebaseConfig = {
+    <a href="upload.html" class="upload-link">+ Upload Photo</a>
+  </header>
+
+  <main id="gallery"></main>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+
+  <script>
+        const firebaseConfig = {
     apiKey: "AIzaSyBHiXDPWU0V9zBhoicWb7VL5YP6I7ZIcBo",
     authDomain: "website-f9439.firebaseapp.com",
     projectId: "website-f9439",
@@ -19,10 +27,25 @@
     messagingSenderId: "614527810563",
     appId: "1:614527810563:web:42ad92fc101c83d095a236"
     };
-    const galleryRef = storage.ref("images");
 
-firebase.initializeApp(firebaseConfig);
-const storage = firebase.storage();></script>
 
+    firebase.initializeApp(firebaseConfig);
+    const storage = firebase.storage();
+
+    const listRef = storage.ref().child("images");
+
+    listRef.listAll().then((res) => {
+      res.items.forEach((itemRef) => {
+        itemRef.getDownloadURL().then((url) => {
+          const img = document.createElement("img");
+          img.src = url;
+          img.className = "gallery-image";
+          document.getElementById("gallery").appendChild(img);
+        });
+      });
+    }).catch((error) => {
+      console.log("Error loading images:", error);
+    });
+  </script>
 </body>
 </html>
