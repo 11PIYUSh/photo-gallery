@@ -11,6 +11,7 @@
   <h1>Upload Photos</h1>
   <input type="file" id="fileInput" multiple accept="image/*">
   <button onclick="uploadImages()">Upload</button>
+  <a href="index.html">Back to Home</a>
   <div id="status"></div>
 
   <script>
@@ -22,7 +23,7 @@
       messagingSenderId: "614527810563",
       appId: "1:614527810563:web:42ad92fc101c83d095a236"
     };  
-
+const storageRef = storage.ref("images/" + file.name);
     firebase.initializeApp(firebaseConfig);
     const storage = firebase.storage();
 
