@@ -3,19 +3,28 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Upload Image</title>
-  <link rel="stylesheet" href="upload.css">
+  <title>Upload Image (Admin)</title>
+  <link rel="stylesheet" href="upload.css" />
 </head>
 <body>
   <div class="upload-container">
-    <h1>Upload Image</h1>
-    <input type="file" id="fileInput" />
-    <button onclick="uploadImage()">Upload</button>
-    <p id="status"></p>
-    <a href="index.html" class="home-link">← Go to Home</a>
+    <div id="authBox">
+      <h2>Admin Login</h2>
+      <input type="password" id="passwordInput" placeholder="Enter password" />
+      <button onclick="checkPassword()">Login</button>
+      <p id="authMessage"></p>
+    </div>
+
+    <div id="uploadForm" style="display: none;">
+      <h1>Upload Image</h1>
+      <input type="file" id="fileInput" />
+      <button onclick="uploadImage()">Upload</button>
+      <p id="status"></p>
+      <a href="index.html" class="home-link">← Go to Home</a>
+    </div>
   </div>
 
-  <!-- Firebase SDKs -->
+  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
 
@@ -32,6 +41,18 @@
 
     firebase.initializeApp(firebaseConfig);
     const storage = firebase.storage();
+
+    function checkPassword() {
+      const input = document.getElementById("passwordInput").value;
+      const correctPassword = "firebase.storage"; // CHANGE this to your secret password
+
+      if (input === correctPassword) {
+        document.getElementById("authBox").style.display = "none";
+        document.getElementById("uploadForm").style.display = "block";
+      } else {
+        document.getElementById("authMessage").innerText = "Incorrect password!";
+      }
+    }
 
     function uploadImage() {
       const file = document.getElementById("fileInput").files[0];
