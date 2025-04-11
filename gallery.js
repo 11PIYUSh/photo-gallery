@@ -68,3 +68,20 @@ function deleteImage(path) {
     loadImages();
   });
 }
+
+function displayImage(url) {
+  const galleryContainer = document.getElementById("gallery");
+
+  const link = document.createElement("a");
+  link.href = url; // Direct Firebase image URL
+  link.setAttribute("data-lightbox", "gallery");
+  link.setAttribute("data-title", "Tap to close");
+
+  const img = document.createElement("img");
+  img.src = url;
+  img.alt = "Uploaded Image";
+  img.classList.add("gallery-image"); // optional for CSS styling
+
+  link.appendChild(img);
+  galleryContainer.appendChild(link);
+}
